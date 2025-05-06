@@ -1,84 +1,80 @@
 // Copyright 2021 NNTU-CS
+#ifndef INCLUDE_TPQUEUE_ALT_H_
+#define INCLUDE_TPQUEUE_ALT_H_
+
 #include <iostream>
 #include <stdexcept>
 
 struct SYM {
-    char ch;
-    int prior;
+  char symbol;
+  int priority;
 };
 
-template<typename T>
+template <typename T>
+class QueueNode {
+ public:
+  T value;
+  QueueNode* next;
+
+  explicit QueueNode(T val) : value(val), next(nullptr) {}
+};
+
+template <typename T>
 class TPQueue {
-private:
-    struct Node {
-        T data;
-        Node* next;
-        explicit Node(T s) : data(s), next(nullptr) {}
-    };
+ private:
+  QueueNode<T>* front;
 
-    Node* head;
+ public:
+  TPQueue() : front(nullptr) {}
 
-public:
-    TPQueue() : head(nullptr) {}
+  ~TPQueue() {
+    while (!isEmpty()) {
+      remove();
+    }
+  }
 
-    ~TPQueue() {
-        while (head) pop();
+  void insert(const T& element) {
+    QueueNode<T>* newNode = new QueueNode<T>(element);
+
+    if (!front || element.priority > front->value.priority) {
+      newNode->next = front;
+      front = newNode;
+      return;
     }
 
-    void push(const T& elem) {
-        Node* newNode = new Node(elem);
-        if (!head || elem.prior > head->data.prior) {
-            newNode->next = head;
-            head = newNode;
-            return;
-        }
-
-        Node* current = head;
-        while (current->next && current->next->data.prior >= elem.prior) {
-            current = current->next;
-        }
-        newNode->next = current->next;
-        current->next = newNode;
+    QueueNode<T>* walker = front;
+    while (walker->next && walker->next->value.priority >= element.priority) {
+      walker = walker->next;
     }
 
-    T pop() {
-        if (!head) throw std::runtime_error("Queue is empty");
-        Node* temp = head;
-        T result = head->data;
-        head = head->next;
-        delete temp;
-        return result;
-    }
+    newNode->next = walker->next;
+    walker->next = newNode;
+  }
 
-    T top() const {
-        if (!head) throw std::runtime_error("Queue is empty");
-        return head->data;
+  T remove() {
+    if (!front) {
+      throw std::runtime_error("Priority queue is empty");
     }
+    QueueNode<T>* temp = front;
+    T removedValue = front->value;
+    front = front->next;
+    delete temp;
+    return removedValue;
+  }
 
-    bool isEmpty() const {
-        return head == nullptr;
-    }
+  bool isEmpty() const {
+    return front == nullptr;
+  }
 
-    void print() const {
-        Node* current = head;
-        while (current) {
-            std::cout << current->data.ch << " (" << current->data.prior << ")\n";
-            current = current->next;
-        }
+  void display() const {
+    QueueNode<T>* cursor = front;
+    while (cursor) {
+      std::cout << "(" << cursor->value.symbol << ", " << cursor->value.priority << ") -> ";
+      cursor = cursor->next;
     }
+    std::cout << "null" << std::endl;
+  }
 };
 
-int main() {
-    TPQueue<SYM> pqueue;
-    pqueue.push(SYM{'a', 4});
-    pqueue.push(SYM{'b', 7});
-
-    SYM c1 = pqueue.pop();
-    SYM c2 = pqueue.pop();
-
-    std::cout << "Popped: " << c1.ch << " (" << c1.prior << ")\n";
-    std::cout << "Popped: " << c2.ch << " (" << c2.prior << ")\n";
-
-    return 0;
-}
+#endif  // INCLUDE_TPQUEUE_ALT_H_
 
