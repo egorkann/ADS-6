@@ -1,17 +1,13 @@
 // Copyright 2021 NNTU-CS
 #include <iostream>
 
-struct SYM {
-    char ch;
-    int prior;
-};
-
+template<typename T>
 class TPQueue {
 private:
     struct Node {
-        SYM data;
+        T data;
         Node* next;
-        Node(SYM s) : data(s), next(nullptr) {}
+        Node(T s) : data(s), next(nullptr) {}
     };
 
     Node* head;
@@ -23,7 +19,7 @@ public:
         while (head) pop();
     }
 
-    void push(const SYM& elem) {
+    void push(const T& elem) {
         Node* newNode = new Node(elem);
         if (!head || elem.prior > head->data.prior) {
             newNode->next = head;
@@ -46,7 +42,7 @@ public:
         delete temp;
     }
 
-    SYM top() const {
+    T top() const {
         if (!head) throw std::runtime_error("Queue is empty");
         return head->data;
     }
@@ -64,8 +60,14 @@ public:
     }
 };
 
+// SYM struct stays the same
+struct SYM {
+    char ch;
+    int prior;
+};
+
 int main() {
-    TPQueue q;
+    TPQueue<SYM> q;
     q.push({'A', 2});
     q.push({'B', 5});
     q.push({'C', 3});
