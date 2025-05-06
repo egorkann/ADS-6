@@ -1,5 +1,8 @@
+// Copyright 2025 NNTU-CS
+
 #ifndef INCLUDE_PRIORITY_QUEUE_H_
 #define INCLUDE_PRIORITY_QUEUE_H_
+
 #include <stdexcept>
 
 template<typename T>
@@ -61,7 +64,6 @@ class TPQueue {
     return remove();
   }
 
-  // Добавим нужные методы
   void push(const T& element) {
     insert(element);
   }
@@ -71,5 +73,5 @@ class TPQueue {
   }
 };
 
-#endif  
+#endif  // INCLUDE_PRIORITY_QUEUE_H_
 
