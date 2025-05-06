@@ -28,40 +28,34 @@ class TPQueue {
     }
   }
 
-  void push(const T& value);
+  void push(const T& value) {
+    Node* newNode = new Node(value);
+    if (!head || value.prior > head->data.prior) {
+      newNode->next = head;
+      head = newNode;
+      return;
+    }
 
-  T pop();
+    Node* current = head;
+    while (current->next && current->next->data.prior >= value.prior) {
+      current = current->next;
+    }
+
+    newNode->next = current->next;
+    current->next = newNode;
+  }
+
+  T pop() {
+    if (!head)
+      throw std::out_of_range("Queue is empty");
+
+    Node* temp = head;
+    T result = temp->data;
+    head = head->next;
+    delete temp;
+    return result;
+  }
 };
-
-template<typename T>
-void TPQueue<T>::push(const T& value) {
-  Node* newNode = new Node(value);
-  if (!head || value.prior > head->data.prior) {
-    newNode->next = head;
-    head = newNode;
-    return;
-  }
-
-  Node* current = head;
-  while (current->next && current->next->data.prior >= value.prior) {
-    current = current->next;
-  }
-
-  newNode->next = current->next;
-  current->next = newNode;
-}
-
-template<typename T>
-T TPQueue<T>::pop() {
-  if (!head)
-    throw std::out_of_range("Queue is empty");
-
-  Node* temp = head;
-  T result = temp->data;
-  head = head->next;
-  delete temp;
-  return result;
-}
 
 int main() {
   TPQueue<SYM> pqueue;
@@ -78,3 +72,4 @@ int main() {
 
   return 0;
 }
+
