@@ -3,8 +3,7 @@
 #include <stdexcept>
 
 struct SYM {
-  char ch;
-  int prior;
+  int prior; 
 };
 
 template<typename T>
