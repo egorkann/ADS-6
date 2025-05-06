@@ -60,6 +60,23 @@ class TPQueue {
 int main() {
   TPQueue<SYM> pqueue;
 
+  pqueue.push({'a', 4});
+  pqueue.push({'b', 7});
+  pqueue.push({'c', 2});
+
+  SYM sym1 = pqueue.pop();
+  SYM sym2 = pqueue.pop();
+
+  std::cout << sym1.ch << " " << sym1.prior << std::endl;
+  std::cout << sym2.ch << " " << sym2.prior << std::endl;
+
+  return 0;
+}
+
+
+int main() {
+  TPQueue<SYM> pqueue;
+
   pqueue.push(SYM{'a', 4});
   pqueue.push(SYM{'b', 7});
   pqueue.push(SYM{'c', 2});
