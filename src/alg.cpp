@@ -60,9 +60,9 @@ class TPQueue {
 int main() {
   TPQueue<SYM> pqueue;
 
-  pqueue.push({'a', 4});
-  pqueue.push({'b', 7});
-  pqueue.push({'c', 2});
+  pqueue.push(SYM{'a', 4});
+  pqueue.push(SYM{'b', 7});
+  pqueue.push(SYM{'c', 2});
 
   SYM sym1 = pqueue.pop();
   SYM sym2 = pqueue.pop();
@@ -72,4 +72,3 @@ int main() {
 
   return 0;
 }
-
