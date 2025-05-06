@@ -30,48 +30,61 @@ public:
         }
     }
 
-    void push(const T& element) {
-        QueueNode<T>* newNode = new QueueNode<T>(element);
+    void push(const T& element);
 
-        if (!front || element.priority > front->value.priority) {
-            newNode->next = front;
-            front = newNode;
-            return;
-        }
+    T pop();
 
-        QueueNode<T>* current = front;
-        while (current->next && current->next->value.priority >= element.priority) {
-            current = current->next;
-        }
+    bool isEmpty() const;
 
-        newNode->next = current->next;
-        current->next = newNode;
-    }
-
-    T pop() {
-        if (!front) {
-            throw std::runtime_error("Priority queue is empty");
-        }
-        QueueNode<T>* temp = front;
-        T poppedValue = front->value;
-        front = front->next;
-        delete temp;
-        return poppedValue;
-    }
-
-    bool isEmpty() const {
-        return front == nullptr;
-    }
-
-    void printQueue() const {
-        QueueNode<T>* current = front;
-        while (current) {
-            std::cout << "(" << current->value.symbol << ", " << current->value.priority << ") -> ";
-            current = current->next;
-        }
-        std::cout << "null" << std::endl;
-    }
+    void printQueue() const;
 };
+
+template <typename T>
+void TPQueue<T>::push(const T& element) {
+    QueueNode<T>* newNode = new QueueNode<T>(element);
+
+    if (!front || element.priority > front->value.priority) {
+        newNode->next = front;
+        front = newNode;
+        return;
+    }
+
+    QueueNode<T>* current = front;
+    while (current->next && current->next->value.priority >= element.priority) {
+        current = current->next;
+    }
+
+    newNode->next = current->next;
+    current->next = newNode;
+}
+
+template <typename T>
+T TPQueue<T>::pop() {
+    if (!front) {
+        throw std::runtime_error("Priority queue is empty");
+    }
+    QueueNode<T>* temp = front;
+    T poppedValue = front->value;
+    front = front->next;
+    delete temp;
+    return poppedValue;
+}
+
+template <typename T>
+bool TPQueue<T>::isEmpty() const {
+    return front == nullptr;
+}
+
+template <typename T>
+void TPQueue<T>::printQueue() const {
+    QueueNode<T>* current = front;
+    while (current) {
+        std::cout << "(" << current->value.symbol << ", " << current->value.priority
+                  << ") -> ";
+        current = current->next;
+    }
+    std::cout << "null" << std::endl;
+}
 
 int main() {
     TPQueue<SYM> pqueue;
