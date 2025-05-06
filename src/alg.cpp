@@ -1,6 +1,6 @@
 // Copyright 2021 NNTU-CS
-#ifndef INCLUDE_TPQUEUE_ALT_H_
-#define INCLUDE_TPQUEUE_ALT_H_
+#ifndef INCLUDE_TPQUEUE_H_
+#define INCLUDE_TPQUEUE_H_
 
 #include <iostream>
 #include <stdexcept>
@@ -29,11 +29,11 @@ class TPQueue {
 
   ~TPQueue() {
     while (!isEmpty()) {
-      remove();
+      pop();
     }
   }
 
-  void insert(const T& element) {
+  void push(const T& element) {
     QueueNode<T>* newNode = new QueueNode<T>(element);
 
     if (!front || element.priority > front->value.priority) {
@@ -42,39 +42,38 @@ class TPQueue {
       return;
     }
 
-    QueueNode<T>* walker = front;
-    while (walker->next && walker->next->value.priority >= element.priority) {
-      walker = walker->next;
+    QueueNode<T>* current = front;
+    while (current->next && current->next->value.priority >= element.priority) {
+      current = current->next;
     }
 
-    newNode->next = walker->next;
-    walker->next = newNode;
+    newNode->next = current->next;
+    current->next = newNode;
   }
 
-  T remove() {
+  T pop() {
     if (!front) {
       throw std::runtime_error("Priority queue is empty");
     }
     QueueNode<T>* temp = front;
-    T removedValue = front->value;
+    T poppedValue = front->value;
     front = front->next;
     delete temp;
-    return removedValue;
+    return poppedValue;
   }
 
   bool isEmpty() const {
     return front == nullptr;
   }
 
-  void display() const {
-    QueueNode<T>* cursor = front;
-    while (cursor) {
-      std::cout << "(" << cursor->value.symbol << ", " << cursor->value.priority << ") -> ";
-      cursor = cursor->next;
+  void printQueue() const {
+    QueueNode<T>* current = front;
+    while (current) {
+      std::cout << "(" << current->value.symbol << ", " << current->value.priority << ") -> ";
+      current = current->next;
     }
     std::cout << "null" << std::endl;
   }
 };
 
-#endif  // INCLUDE_TPQUEUE_ALT_H_
-
+#endif  
