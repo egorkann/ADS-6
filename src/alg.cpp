@@ -2,11 +2,13 @@
 #include <iostream>
 #include <stdexcept>
 
+// Структура SYM для хранения символа и его приоритета
 struct SYM {
     char symbol;
     int priority;
 };
 
+// Шаблонный класс для узла очереди
 template <typename T>
 class QueueNode {
 public:
@@ -16,6 +18,7 @@ public:
     explicit QueueNode(T val) : value(val), next(nullptr) {}
 };
 
+// Шаблонный класс для очереди с приоритетом
 template <typename T>
 class TPQueue {
 private:
@@ -30,61 +33,53 @@ public:
         }
     }
 
-    void push(const T& element);
+    // Добавление элемента в очередь
+    void push(const T& element) {
+        QueueNode<T>* newNode = new QueueNode<T>(element);
 
-    T pop();
+        if (!front || element.priority > front->value.priority) {
+            newNode->next = front;
+            front = newNode;
+            return;
+        }
 
-    bool isEmpty() const;
+        QueueNode<T>* current = front;
+        while (current->next && current->next->value.priority >= element.priority) {
+            current = current->next;
+        }
 
-    void printQueue() const;
+        newNode->next = current->next;
+        current->next = newNode;
+    }
+
+    // Удаление элемента из очереди
+    T pop() {
+        if (!front) {
+            throw std::runtime_error("Priority queue is empty");
+        }
+        QueueNode<T>* temp = front;
+        T poppedValue = front->value;
+        front = front->next;
+        delete temp;
+        return poppedValue;
+    }
+
+    // Проверка, пуста ли очередь
+    bool isEmpty() const {
+        return front == nullptr;
+    }
+
+    // Печать очереди
+    void printQueue() const {
+        QueueNode<T>* current = front;
+        while (current) {
+            std::cout << "(" << current->value.symbol << ", " << current->value.priority
+                      << ") -> ";
+            current = current->next;
+        }
+        std::cout << "null" << std::endl;
+    }
 };
-
-template <typename T>
-void TPQueue<T>::push(const T& element) {
-    QueueNode<T>* newNode = new QueueNode<T>(element);
-
-    if (!front || element.priority > front->value.priority) {
-        newNode->next = front;
-        front = newNode;
-        return;
-    }
-
-    QueueNode<T>* current = front;
-    while (current->next && current->next->value.priority >= element.priority) {
-        current = current->next;
-    }
-
-    newNode->next = current->next;
-    current->next = newNode;
-}
-
-template <typename T>
-T TPQueue<T>::pop() {
-    if (!front) {
-        throw std::runtime_error("Priority queue is empty");
-    }
-    QueueNode<T>* temp = front;
-    T poppedValue = front->value;
-    front = front->next;
-    delete temp;
-    return poppedValue;
-}
-
-template <typename T>
-bool TPQueue<T>::isEmpty() const {
-    return front == nullptr;
-}
-
-template <typename T>
-void TPQueue<T>::printQueue() const {
-    QueueNode<T>* current = front;
-    while (current) {
-        std::cout << "(" << current->value.symbol << ", " << current->value.priority
-                  << ") -> ";
-        current = current->next;
-    }
-    std::cout << "null" << std::endl;
-}
 
 int main() {
     TPQueue<SYM> pqueue;
