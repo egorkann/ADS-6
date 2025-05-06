@@ -3,7 +3,7 @@
 #include <stdexcept>
 
 template<typename T>
-class PriorityQueue {
+class TPQueue {
  private:
   struct Node {
     T data;
@@ -13,9 +13,9 @@ class PriorityQueue {
   Node* head;
 
  public:
-  PriorityQueue() : head(nullptr) {}
+  TPQueue() : head(nullptr) {}
 
-  ~PriorityQueue() {
+  ~TPQueue() {
     while (head) {
       Node* tempNode = head;
       head = head->next;
@@ -60,7 +60,16 @@ class PriorityQueue {
   T extract() {
     return remove();
   }
+
+  // Добавим нужные методы
+  void push(const T& element) {
+    insert(element);
+  }
+
+  T pop() {
+    return extract();
+  }
 };
 
-#endif  // INCLUDE_PRIORITY_QUEUE_H_
+#endif  
 
