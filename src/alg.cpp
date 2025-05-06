@@ -15,6 +15,7 @@ class TPQueue {
     Node* next;
     explicit Node(const T& value) : data(value), next(nullptr) {}
   };
+
   Node* head;
 
  public:
@@ -46,8 +47,9 @@ class TPQueue {
   }
 
   T pop() {
-    if (!head)
+    if (!head) {
       throw std::out_of_range("Queue is empty");
+    }
 
     Node* temp = head;
     T result = temp->data;
