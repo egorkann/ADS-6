@@ -1,4 +1,3 @@
-// Copyright 2025 NNTU-CS
 #include <iostream>
 #include <stdexcept>
 
@@ -25,14 +24,13 @@ public:
     TPQueue() : front(nullptr) {}
 
     ~TPQueue() {
-        while (!isEmpty()) {
+        while (front) {
             pop();
         }
     }
 
     void push(const T& element) {
         QueueNode<T>* newNode = new QueueNode<T>(element);
-
         if (!front || element.priority > front->value.priority) {
             newNode->next = front;
             front = newNode;
@@ -49,9 +47,8 @@ public:
     }
 
     T pop() {
-        if (!front) {
-            throw std::runtime_error("Priority queue is empty");
-        }
+        if (!front) throw std::runtime_error("Priority queue is empty");
+
         QueueNode<T>* temp = front;
         T poppedValue = front->value;
         front = front->next;
@@ -64,11 +61,8 @@ public:
     }
 
     void printQueue() const {
-        QueueNode<T>* current = front;
-        while (current) {
-            std::cout << "(" << current->value.symbol << ", " << current->value.priority
-                      << ") -> ";
-            current = current->next;
+        for (QueueNode<T>* current = front; current; current = current->next) {
+            std::cout << "(" << current->value.symbol << ", " << current->value.priority << ") -> ";
         }
         std::cout << "null" << std::endl;
     }
@@ -95,4 +89,3 @@ int main() {
 
     return 0;
 }
-
