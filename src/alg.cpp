@@ -41,11 +41,13 @@ public:
         current->next = newNode;
     }
 
-    void pop() {
-        if (!head) return;
+    T pop() {
+        if (!head) throw std::runtime_error("Queue is empty");
         Node* temp = head;
+        T result = head->data;
         head = head->next;
         delete temp;
+        return result;
     }
 
     T top() const {
@@ -67,21 +69,15 @@ public:
 };
 
 int main() {
-    TPQueue<SYM> q;
-    q.push({'A', 2});
-    q.push({'B', 5});
-    q.push({'C', 3});
-    q.push({'D', 5});
-    q.push({'E', 1});
+    TPQueue<SYM> pqueue;
+    pqueue.push(SYM{'a', 4});
+    pqueue.push(SYM{'b', 7});
 
-    q.print();
+    SYM c1 = pqueue.pop();
+    SYM c2 = pqueue.pop();
 
-    std::cout << "\nPopping:\n";
-    while (!q.isEmpty()) {
-        SYM s = q.top();
-        std::cout << s.ch << " (" << s.prior << ")\n";
-        q.pop();
-    }
+    std::cout << "Popped: " << c1.ch << " (" << c1.prior << ")\n";
+    std::cout << "Popped: " << c2.ch << " (" << c2.prior << ")\n";
 
     return 0;
 }
