@@ -3,7 +3,8 @@
 #include <stdexcept>
 
 struct SYM {
-  int prior; 
+  char ch;
+  int prior;
 };
 
 template<typename T>
@@ -57,5 +58,4 @@ class TPQueue {
     return result;
   }
 };
-
 
