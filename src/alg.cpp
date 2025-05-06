@@ -66,7 +66,8 @@ public:
     void printQueue() const {
         QueueNode<T>* current = front;
         while (current) {
-            std::cout << "(" << current->value.symbol << ", " << current->value.priority << ") -> ";
+            std::cout << "(" << current->value.symbol << ", " << current->value.priority
+                      << ") -> ";
             current = current->next;
         }
         std::cout << "null" << std::endl;
@@ -94,3 +95,4 @@ int main() {
 
     return 0;
 }
+
