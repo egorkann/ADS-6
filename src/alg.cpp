@@ -1,5 +1,11 @@
 // Copyright 2021 NNTU-CS
 #include <iostream>
+#include <stdexcept>
+
+struct SYM {
+    char ch;
+    int prior;
+};
 
 template<typename T>
 class TPQueue {
@@ -7,7 +13,7 @@ private:
     struct Node {
         T data;
         Node* next;
-        Node(T s) : data(s), next(nullptr) {}
+        explicit Node(T s) : data(s), next(nullptr) {}
     };
 
     Node* head;
@@ -60,12 +66,6 @@ public:
     }
 };
 
-// SYM struct stays the same
-struct SYM {
-    char ch;
-    int prior;
-};
-
 int main() {
     TPQueue<SYM> q;
     q.push({'A', 2});
@@ -85,3 +85,4 @@ int main() {
 
     return 0;
 }
+
