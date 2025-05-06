@@ -57,5 +57,12 @@ class TPQueue {
     delete temp;
     return result;
   }
-};
 
+  void print() const {
+    Node* current = head;
+    while (current) {
+      std::cout << current->data.ch << " " << current->data.prior << std::endl;
+      current = current->next;
+    }
+  }
+};
