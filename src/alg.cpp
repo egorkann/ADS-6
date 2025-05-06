@@ -1,9 +1,12 @@
 // Copyright 2025 NNTU-CS
 
-#ifndef INCLUDE_PRIORITY_QUEUE_H_
-#define INCLUDE_PRIORITY_QUEUE_H_
-
+#include <iostream>
 #include <stdexcept>
+
+struct SYM {
+  char ch;
+  int prior;
+};
 
 template<typename T>
 class TPQueue {
@@ -20,58 +23,55 @@ class TPQueue {
 
   ~TPQueue() {
     while (head) {
-      Node* tempNode = head;
+      Node* temp = head;
       head = head->next;
-      delete tempNode;
+      delete temp;
     }
   }
 
-  void add(const T& element) {
-    Node* newNode = new Node(element);
-    if (!head) {
-      head = newNode;
-      return;
-    }
-    if (element.prior > head->data.prior) {
+  // Добавление элемента с учётом приоритета
+  void push(const T& value) {
+    Node* newNode = new Node(value);
+    if (!head || value.prior > head->data.prior) {
       newNode->next = head;
       head = newNode;
       return;
     }
+
     Node* current = head;
-    while (current->next && current->next->data.prior >= element.prior) {
+    while (current->next && current->next->data.prior >= value.prior) {
       current = current->next;
     }
+
     newNode->next = current->next;
     current->next = newNode;
   }
 
-  T remove() {
-    if (!head) {
-      throw std::out_of_range("Queue is empty!");
-    }
-    Node* tempNode = head;
-    T returnValue = head->data;
-    head = head->next;
-    delete tempNode;
-    return returnValue;
-  }
-
-  void insert(const T& element) {
-    add(element);
-  }
-
-  T extract() {
-    return remove();
-  }
-
-  void push(const T& element) {
-    insert(element);
-  }
-
   T pop() {
-    return extract();
+    if (!head)
+      throw std::out_of_range("Queue is empty");
+
+    Node* temp = head;
+    T result = temp->data;
+    head = head->next;
+    delete temp;
+    return result;
   }
 };
 
-#endif  // INCLUDE_PRIORITY_QUEUE_H_
+int main() {
+  TPQueue<SYM> pqueue;
+
+  pqueue.push({'a', 4});
+  pqueue.push({'b', 7});
+  pqueue.push({'c', 2});
+
+  SYM sym1 = pqueue.pop();
+  SYM sym2 = pqueue.pop();
+
+  std::cout << sym1.ch << " " << sym1.prior << std::endl;
+  std::cout << sym2.ch << " " << sym2.prior << std::endl;
+
+  return 0;
+}
 
