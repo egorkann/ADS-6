@@ -2,13 +2,11 @@
 #include <iostream>
 #include <stdexcept>
 
-// Структура SYM для хранения символа и его приоритета
 struct SYM {
     char symbol;
     int priority;
 };
 
-// Шаблонный класс для узла очереди
 template <typename T>
 class QueueNode {
 public:
@@ -18,7 +16,6 @@ public:
     explicit QueueNode(T val) : value(val), next(nullptr) {}
 };
 
-// Шаблонный класс для очереди с приоритетом
 template <typename T>
 class TPQueue {
 private:
@@ -33,7 +30,6 @@ public:
         }
     }
 
-    // Добавление элемента в очередь
     void push(const T& element) {
         QueueNode<T>* newNode = new QueueNode<T>(element);
 
@@ -52,7 +48,6 @@ public:
         current->next = newNode;
     }
 
-    // Удаление элемента из очереди
     T pop() {
         if (!front) {
             throw std::runtime_error("Priority queue is empty");
@@ -64,17 +59,14 @@ public:
         return poppedValue;
     }
 
-    // Проверка, пуста ли очередь
     bool isEmpty() const {
         return front == nullptr;
     }
 
-    // Печать очереди
     void printQueue() const {
         QueueNode<T>* current = front;
         while (current) {
-            std::cout << "(" << current->value.symbol << ", " << current->value.priority
-                      << ") -> ";
+            std::cout << "(" << current->value.symbol << ", " << current->value.priority << ") -> ";
             current = current->next;
         }
         std::cout << "null" << std::endl;
