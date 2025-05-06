@@ -1,59 +1,66 @@
 #ifndef INCLUDE_PRIORITY_QUEUE_H_
 #define INCLUDE_PRIORITY_QUEUE_H_
-
 #include <stdexcept>
 
-struct Symbol {
-  char symbol;
-  int priority;
-};
-
-template <typename T>
+template<typename T>
 class PriorityQueue {
  private:
-  struct Element {
-    T value;
-    Element* next;
-    explicit Element(const T& v) : value(v), next(nullptr) {}
+  struct Node {
+    T data;
+    Node* next;
+    explicit Node(const T& value) : data(value), next(nullptr) {}
   };
-
-  Element* front;
+  Node* head;
 
  public:
-  PriorityQueue() : front(nullptr) {}
+  PriorityQueue() : head(nullptr) {}
 
   ~PriorityQueue() {
-    while (front) {
-      Element* temp = front;
-      front = front->next;
-      delete temp;
+    while (head) {
+      Node* tempNode = head;
+      head = head->next;
+      delete tempNode;
     }
   }
 
-  void enqueue(const T& item) {
-    Element* newElement = new Element(item);
-    if (!front || item.priority > front->value.priority) {
-      newElement->next = front;
-      front = newElement;
+  void add(const T& element) {
+    Node* newNode = new Node(element);
+    if (!head) {
+      head = newNode;
       return;
     }
-    Element* current = front;
-    while (current->next && current->next->value.priority >= item.priority) {
+    if (element.prior > head->data.prior) {
+      newNode->next = head;
+      head = newNode;
+      return;
+    }
+    Node* current = head;
+    while (current->next && current->next->data.prior >= element.prior) {
       current = current->next;
     }
-    newElement->next = current->next;
-    current->next = newElement;
+    newNode->next = current->next;
+    current->next = newNode;
   }
 
-  T dequeue() {
-    if (!front)
-      throw std::runtime_error("Queue is empty");
-    Element* temp = front;
-    T result = front->value;
-    front = front->next;
-    delete temp;
-    return result;
+  T remove() {
+    if (!head) {
+      throw std::out_of_range("Queue is empty!");
+    }
+    Node* tempNode = head;
+    T returnValue = head->data;
+    head = head->next;
+    delete tempNode;
+    return returnValue;
+  }
+
+  void insert(const T& element) {
+    add(element);
+  }
+
+  T extract() {
+    return remove();
   }
 };
 
 #endif  // INCLUDE_PRIORITY_QUEUE_H_
+
